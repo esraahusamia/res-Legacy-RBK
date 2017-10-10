@@ -9,10 +9,11 @@ var userSchema = mongoose.Schema({
   // bookId:[
   //     {type: Schema.Types.ObjectId, ref: 'books'}
   //   ],
-  read:Array,
-  wantToRead:Array,
-  reading:Array,
-  favourite:Array
+  // read:Array,
+  // wantToRead:Array,
+  // reading:Array,
+  // favourite:Array
+  favouriteList :Array
 })
 var users = mongoose.model('User', userSchema);
 //this for encrypt password data
