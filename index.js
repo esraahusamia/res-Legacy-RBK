@@ -9,6 +9,7 @@ var books=require('./database/model/books');
 var users=require('./database/model/users');
 var reviews=require('./database/model/reviews');
 var session=require('express-session'); 
+
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,6 +23,26 @@ app.use(session({
   resave:false,
   aveUnintinalized:true
 }));
+
+app.get ('/', (req, res) => {
+  console.log ('aaaaaaaaaaaaa')
+  if ( !!req.session.username ){
+    res.redirect ('/index2.html');
+  }else{
+    res.redirect ('/login');
+  }
+})
+
+app.get ('/index', (req, res) => {
+  // console.log (req.session.username, '--------', !!req.session.username);
+  if (!!req.session.username){
+    res.redirect ('/index2.html');
+  }else{
+    // console.log ('-------- refused to login')
+    res.redirect ('/login');
+  }
+})
+
 //render the login page
 app.get('/login', 
   function(req, res) {
@@ -66,7 +87,7 @@ var createSession = function(req, res, newUser) {
   return req.session.regenerate(function() {
     console.log( req.session)
     req.session.user = newUser;
-    res.redirect('index.html');
+    res.redirect('index2.html');
   });
 };
 //comparing the input password to the saved one in the database 
@@ -82,24 +103,35 @@ var comparePassword = function (attemptedPassword, callback) {
 }
 //handle the login post 
 app.post('/login', function(req, res) {
+  console.log ('++++++>')
  var username = req.body.username;
  var password = req.body.password;
     //check if the user in the database or not 
-    users.findOne({ username: username }).exec(function(err, user) {
+    users.findOne({ username: username }, function(err, user) {
      if (!user) {
        res.redirect('/login');
      } else {
-       comparePassword(password, function(err, match) {
-        if (match) {
-          users.createSession(req, res, user);
+       // comparePassword(password, function(err, match) {
+       //  if (match) {
+          // users.createSession(req, res, user);
+          if (password === user.password){
+          req.session.username = user.username;
+          console.log ('---->', req.session.username)
+          res.redirect ('/index');
+
         } else {
           res.redirect('/login');
         }
-      });
+      // });
      }
-   });
+   })
   });
 //end of user siginup and login handling
+
+app.get ('/logout', (req, res) => {
+  req.session.username = null;
+  redirect ('/login');
+})
 
 //this part for search in google Api
 app.post('/search',function (req,res){
@@ -130,12 +162,57 @@ app.post('/coment',function (req,res){
     })
   })
 //this get to send all the books data from the database to the client 
-//it will recived in index.html page 
+//it will recived in index2.html page 
 app.get('/init',function (req,res){
   books.find({},function(err, result){
     res.json(result)
   })
 })
+
+// app.post('/addToList',function(req,res){
+//   users.findOne({
+//     username: req.session.username
+//   }, (err, user) => {
+//     if (err) console.log (err);
+
+//     users.update({
+//       lists: 
+//     })
+//   })
+// })
+
+app.put('/createList',function(req,res){
+  // mongo.connect(url,function(err,db){
+    console.log ('llllllllllllll')
+    users.update(
+      {username:req.session.username},
+      {$push:
+        {lists: {listName: req.body.listName, list: [req.body.book_id]}}
+      },function(err,updateList){
+        if(err)
+          console.login('error')
+        else
+          res.send(updateList)
+      }
+    )
+
+  })
+// })
+
+// app.post('/index',function(req,res){
+//   mongo.connect(url,function(err,db){
+//     assert.equal(null,err)
+//     db.collection('users').insertOne(
+//       [{listName:req.body.listName,bookId:req.body.Id}
+//        ]
+//        ,function(err,result){
+//     console.log('inserted');
+//     db.close();
+//   })
+//   })
+// })
+
+
 
 // books.create({title:'creating-your-cv-as-a-self-marketing-tool',
 //   gener:'Career & Study advice',
@@ -490,6 +567,9 @@ app.get('/init',function (req,res){
 //     }
   
 // });
+  app.use(function(req, res){
+       res.send(404);
+   });
 //server creating 
 app.listen(port, function() {
   console.log(`listening on port ${port}`);

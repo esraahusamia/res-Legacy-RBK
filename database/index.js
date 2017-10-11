@@ -1,8 +1,8 @@
 //This file for connecting to the database
 var mongoose = require('mongoose');
-var mongoUrl='mongodb://admin:admin@ds113435.mlab.com:13435/books'
-mongoose.connect(mongoUrl);
-// mongoose.connect('mongodb://localhost/Books');
+// var mongoUrl='mongodb://admin:admin@ds113435.mlab.com:13435/books'
+// mongoose.connect(mongoUrl);
+mongoose.connect('mongodb://localhost/Books');
 //mongodb://<dbuser>:<dbpassword>@ds113435.mlab.com:13435/books
 
 var db = mongoose.connection;

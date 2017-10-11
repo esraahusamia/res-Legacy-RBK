@@ -13,7 +13,8 @@ var userSchema = mongoose.Schema({
   // wantToRead:Array,
   // reading:Array,
   // favourite:Array
-  favouriteList :Array
+  favouriteList :Array,
+  lists:Array
 })
 var users = mongoose.model('User', userSchema);
 //this for encrypt password data
