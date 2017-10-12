@@ -25,6 +25,7 @@
 	<script src="controller/list.js"></script>
 	<script src="controller/bookList.js"></script>
 
+
 </head>
 <body ng-app ="book-store">
 
@@ -36,7 +37,7 @@
 		</div>
 		<nav>
 			<ul>
-				<li class='current'><a href="index2.html"> Home</a></li>
+				<li class='current'><a href="index.html"> Home</a></li>
 				<li><a href="about.html"> About</a></li>
 				<li><a href="api.html">Google Search </a></li>
 				<li><a href="login.html"> Login</a></li>
@@ -58,14 +59,10 @@
     <!--middle-->
      <div id='app' class="mainDiv">
    	 <div class="container1">
+			 <lists></lists>
    	 <!-- <books/> -->
-		 <lists></lists>
-
      </div>
    	 </div>
-		 <br /><br />
-		 <br /><br />
-
 
    	<!-- footer -->
    	<footer>
@@ -90,27 +87,6 @@
     		})
 
 		})();
-	</script>
-
-	<script type="text/javascript">
-
-	// (function (){
-  //     $.ajax({
-  //        async: false,
-	//
-  //       url: "/getLists",
-  //       type:'GET',
-	//
-  //       dataType: 'json',
-  //       success: function(lists){
-  //         console.log('liiiiiiist');
-  //         window.lists=lists;
-	//
-  //         }
-	//
-  //       })
-	//
-  //   })();
 	</script>
 </body>
 </html>
