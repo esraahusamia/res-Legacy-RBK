@@ -48,7 +48,7 @@
 					</div>
 					<div style="margin-top: 20px ;color: black">
 						<a href='{{"../pdf/"+ book.pdf}}' download style="color: black;font-weight: bold">
-							<button class='downlodebtn'>Download</button>
+							<button ng-show = "download" class='downlodebtn'>Download</button>
 						</a> </div>
 
 					</div>
@@ -73,10 +73,12 @@
 									    <button style = "margin-top: 20px; margin-left:15px; width:80%; height:35px; font-weight:700; color: black; background-color: #ff9900; border-radius: 25px;" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">add to
 									    <span class="caret"></span></button>
 									    <ul class="dropdown-menu">
-									      <li><a style="font-weight:700" ng-click="$ctrl.addToList()">read</a></li>
+									    <li ng-repeat = "list in $ctrl.lists" >{{list.listName}}</li> 
+
+									  <!--     <li><a style="font-weight:700" ng-click="$ctrl.addToList()">read</a></li>
 									      <li><a style="font-weight:700" ng-click="$ctrl.addToList()">want to read</a></li>
 									      <li><a style="font-weight:700" ng-click="$ctrl.addToList()">reading</a></li>
-									      <li><a style="font-weight:700" ng-click="$ctrl.addToList()">favorite</a></li>
+									      <li><a style="font-weight:700" ng-click="$ctrl.addToList()">favorite</a></li> -->
 									      <li><a style="font-weight:700"
 									      class="btn btn-primary " 
 					                      data-toggle="modal" 

@@ -24,6 +24,11 @@ app.use(session({
   aveUnintinalized:true
 }));
 
+// app.get('/index2',function(req, res){
+//   res.redirect('/index2.html');
+// })
+
+
 app.get ('/', (req, res) => {
   console.log ('aaaaaaaaaaaaa')
   if ( !!req.session.username ){
@@ -33,7 +38,7 @@ app.get ('/', (req, res) => {
   }
 })
 
-app.get ('/index', (req, res) => {
+app.get ('/index2', (req, res) => {
   // console.log (req.session.username, '--------', !!req.session.username);
   if (!!req.session.username){
     res.redirect ('/index2.html');
@@ -103,27 +108,26 @@ var comparePassword = function (attemptedPassword, callback) {
 }
 //handle the login post 
 app.post('/login', function(req, res) {
-  console.log ('++++++>')
- var username = req.body.username;
- var password = req.body.password;
-    //check if the user in the database or not 
-    users.findOne({ username: username }, function(err, user) {
-     if (!user) {
-       res.redirect('/login');
-     } else {
-       // comparePassword(password, function(err, match) {
-       //  if (match) {
-          // users.createSession(req, res, user);
-          if (password === user.password){
-          req.session.username = user.username;
-          console.log ('---->', req.session.username)
-          res.redirect ('/index');
-
-        } else {
-          res.redirect('/login');
-        }
-      // });
-     }
+  console.log ('++++++> ');
+  var username = req.body.username;
+  var password = req.body.password;
+  //check if the user in the database or not 
+  users.findOne({ username: username }, function(err, user) {
+   if (!user) {
+     res.redirect('/login');
+   } else {
+     // comparePassword(password, function(err, match) {
+     //  if (match) {
+        // users.createSession(req, res, user);
+        if (password === user.password){
+        req.session.username = user.username;
+        console.log ('----> ', req.session.username)
+        res.redirect ('/index2');
+      } else {
+        res.redirect('/login');
+      }
+    // });
+   }
    })
   });
 //end of user siginup and login handling
@@ -197,8 +201,17 @@ app.put('/createList',function(req,res){
     )
 
   })
-// })
 
+app.get('/getLists',function(req,res){
+  var book= db.collection('users').findOne({username:req.body.username}, (err, user) => {
+    if(err)
+      console.log(err)
+    res.send(user.lists);
+  })
+    // res.redirect('/index')
+
+})
+// [{listName:req.body.listName,list:[req.body.book_id]}]
 // app.post('/index',function(req,res){
 //   mongo.connect(url,function(err,db){
 //     assert.equal(null,err)

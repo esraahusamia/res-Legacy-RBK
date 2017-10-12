@@ -6,6 +6,7 @@ angular.module('book-store',['angular.filter'])
   controller: function($scope, $http){
     //This part to store comment in the database and bring all the comments on the book in the database
     this.books=window.data;
+    this.lists=window.lists
     this.coment;
     this.coments;
     this.sendComent=function(){
@@ -88,6 +89,7 @@ angular.module('book-store',['angular.filter'])
    this.changeBook=function (index){
     this.activeBook=index;
   }
+  
   
 },
 

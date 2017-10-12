@@ -321,6 +321,9 @@ header a:hover{
 /* footer */
 
 footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     padding: 20px;
     margin-top: 20px;
     color: #ffffff;
