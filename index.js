@@ -9,6 +9,7 @@ var books=require('./database/model/books');
 var users=require('./database/model/users');
 var reviews=require('./database/model/reviews');
 var session=require('express-session'); 
+var morgan = require('morgan')
 
 var app = express();
 app.use(bodyParser.json());
@@ -27,7 +28,11 @@ app.use(session({
 // app.get('/index2',function(req, res){
 //   res.redirect('/index2.html');
 // })
-
+app.get('/logout', function(req, res) {
+  req.session.username = null;
+  console.log('->>>>>>>>>>>>>', req.session);
+  res.redirect('/login');
+});
 
 app.get ('/', (req, res) => {
   console.log ('aaaaaaaaaaaaa')
@@ -77,7 +82,10 @@ app.post('/signup', function(req, res) {
               res.send(500, err);
             }
             else {
-              createSession(req, res, newUser);
+              // createSession(req, res, newUser);
+              req.session.username=newUser.username
+              res.redirect("/")
+
             }
           });
         } 
@@ -211,6 +219,25 @@ app.get('/getLists',function(req,res){
     // res.redirect('/index')
 
 })
+
+app.post('/addbook', (req, res) => {
+  var book = req.body.data;
+  console.log("boookoskdoskdosjds",req.body)
+
+  books.create({title:req.body.title,
+                 gener:req.body.gener,
+                 publisher:req.body.publisher,
+                 pages:req.body.pages,
+                 description:req.body.description,
+                 Auther:req.body.Auther,
+                  image:req.body.image}, (err, book) => {
+    if(err){
+      throw err;
+    }
+    // console.log('boooooooooooooooooooooooooooook',book)
+    res.json(book);
+  });
+});
 // [{listName:req.body.listName,list:[req.body.book_id]}]
 // app.post('/index',function(req,res){
 //   mongo.connect(url,function(err,db){

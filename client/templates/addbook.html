@@ -1,0 +1,47 @@
+<div class="panel panel-default" style='width: 70%;margin:15%;margin-top: 20px'>
+ 
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+      <form >
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control" ng-model="book.title" placeholder="Title">
+        </div>
+        <div class="form-group">
+          <label>Genre</label>
+          <select ng-model="book.gener" class="form-control">
+            <option value="Career & Study advice">Career & Study advice</option>
+            <option value="Engineering">Engineering</option>
+            <option value="IT & Programming">IT & Programming</option>
+            <option value="Natural Sciences">Natural Sciences</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Author</label>
+          <input type="text" class="form-control" ng-model="book.Auther" placeholder="Author">
+        </div>
+        <div class="form-group">
+          <label>Publisher</label>
+          <input type="text" class="form-control" ng-model="book.publisher" placeholder="Publisher">
+        </div>
+        <div class="form-group">
+          <label>Pages</label>
+          <input type="text" class="form-control" ng-model="book.pages" placeholder="Pages">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" ng-model="book.description" placeholder="Description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" class="form-control" ng-model="book.image" placeholder="Image URL">
+        </div>
+               <button type="submit" ng-click="$ctrl.addBook()" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+    </div>
+  </div>
+</div>
+

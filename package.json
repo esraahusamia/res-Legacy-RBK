@@ -26,6 +26,8 @@
     "express-useragent": "^1.0.8",
     "google-books-search": "^0.3.1",
     "jquery": "^3.2.1",
-    "mongoose": "^4.11.13"
+    "mongoose": "^4.11.13",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.12.1"
   }
 }

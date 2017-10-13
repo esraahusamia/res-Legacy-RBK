@@ -34,79 +34,34 @@
 		</div>
 		<nav>
 			<ul>
-				<li class='current'><a href="index2.html"> Home</a></li>
+				<li><a href="index2.html"> Home</a></li>
 				<li><a href="about.html"> About</a></li>
-				<li><a href="api.html">Google Search </a></li>
+				<li><a href="api.html"> Google Search</a></li>
 				<li><a href="addBook.html">Add Book </a></li>
-				<li><a href="list.html">Lists </a></li>
-				<li><a href="/logout">Logout</a></li>
-
-   			</ul>
+				<li  class='current'><a href="list.html">Lists </a></li>
+				<li><a href="login.html"> Login</a></li>
+				<li><a href="signup.html"> Sign Up</a></li>
+            </ul>
 
 		</nav>
 	</div>
    	</header>
 
-    <!-- Section -->
-    <!-- top -->
-   	<section id='showcase'>
-   	 <div class='container'>
-   	 	<p> There Is NO Friend <br>
-   	 	                         As Loyal As a Book</p>
-   	 </div>
-   	</section>
+
     <!--middle-->
      <div id='app'>
    	 <div class="container1">
-   	 <books/>
+
+
      </div>
    	 </div>
 
 
+
    	<!-- footer -->
    	<footer>
-   		   	<p>&copy; 2017 BookStore.com<p>
-
+   	<p>&copy; 2017 BookStore.com<p>
    	</footer>
-	<script type="text/javascript">
-		(function (){
-			$.ajax({
-				 async: false,
 
-				url: "/init",
-				type:'GET',
-
-				dataType: 'json',
-				success: function(data){
-					console.log(data);
-					window.data=data;
-
-    		  }
-
-    		})
-
-		})();
-	</script>
-
-	<script type="text/javascript">
-		
-	(function (){
-      $.ajax({
-         async: false,
-
-        url: "/getLists",
-        type:'GET',
-
-        dataType: 'json',
-        success: function(lists){
-          console.log(liiiiiiist);
-          window.lists=lists;
-
-          }
-
-        })
-
-    })();
-	</script>
 </body>
 </html>
