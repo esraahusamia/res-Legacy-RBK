@@ -7,6 +7,7 @@
 	<meta name="keywords" content="">
 	<meta name="author" content="">
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/lists.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="angular.min.js"></script>
 	<script	  src="https://code.jquery.com/jquery-3.2.1.js"
@@ -20,10 +21,10 @@
 
 	<script src="controller/books.js"></script>
 	<script src="controller/paid.js"></script>
-	<script src="controller/addbook.js"></script>
-    <script src="controller/lists.js"></script>
+	<script src="controller/lists.js"></script>
 	<script src="controller/list.js"></script>
 	<script src="controller/bookList.js"></script>
+
 
 </head>
 <body ng-app ="book-store">
@@ -36,11 +37,9 @@
 		</div>
 		<nav>
 			<ul>
-				<li><a href="index2.html"> Home</a></li>
+				<li class='current'><a href="index.html"> Home</a></li>
 				<li><a href="about.html"> About</a></li>
 				<li><a href="api.html">Google Search </a></li>
-				<li class='current'><a href="addBook.html">Add Book </a></li>
-				<li><a href="list.html">My Lists </a></li>
 				<li><a href="login.html"> Login</a></li>
 				<li><a href="signup.html"> Sign Up</a></li>
    			</ul>
@@ -51,25 +50,43 @@
 
     <!-- Section -->
     <!-- top -->
-<!--    	<section id='showcase'>
+   	<section id='showcase'>
    	 <div class='container'>
    	 	<p> There Is NO Friend <br>
-   	 	                         As Loyal As a Book</p>
+   				As Loyal As a Book</p>
    	 </div>
-   	</section> -->
+   	</section>
     <!--middle-->
-     <div id='app'>
+     <div id='app' class="mainDiv">
    	 <div class="container1">
-     <addbook/>
+			 <lists></lists>
+   	 <!-- <books/> -->
      </div>
    	 </div>
-
 
    	<!-- footer -->
    	<footer>
    		   	<p>&copy; 2017 BookStore.com<p>
 
    	</footer>
-	
+	<script type="text/javascript">
+		(function (){
+			$.ajax({
+				 async: false,
+
+				url: "/init",
+				type:'GET',
+
+				dataType: 'json',
+				success: function(data){
+					console.log(data);
+					window.data=data;
+
+    		  }
+
+    		})
+
+		})();
+	</script>
 </body>
 </html>

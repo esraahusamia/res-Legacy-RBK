@@ -92,18 +92,27 @@
 									<option selected> add to</option>
 										<option ng-repeat="list in lists">{{list}}</option>
 									</select> -->
-									<p style='margin-top: 20px'><span style="font-weight:900 ;margin-left:20px " > RATING : </span>
+                                   <div  style= 'margin-left: 40px' >
+                                   	<span ng-repeat="rating in ratings">{{rating.current}} out of {{rating.max}}
+							        	<div star-rating rating-value="rating.current" max="rating.max" on-rating-selected="$ctrl.getSelectedRating(rating)"></div>
+							        </span>
+                                   </div>
+									
+
+
+
+									<!-- <p style='margin-top: 20px'><span style="font-weight:900 ;margin-left:20px " > RATING : </span>
 										<span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
 										<span><input type="radio" name="rating" id="str4" value="4"><label for="str4"></label></span>
 										<span><input type="radio" name="rating" id="str3" value="3"><label for="str3"></label></span>
 										<span><input type="radio" name="rating" id="str2" value="2"><label for="str2"></label></span>
 										<span><input type="radio" name="rating" id="str1" value="1"><label for="str1"></label></span>
-									</p>
+									</p> -->
 								</div>
 								<div class="col-sm-8 sidenav"> <div class="container-fluid">
 									<p><span style="font-weight:900"> AUTHOR :</span> {{$ctrl.activeBook.Auther}}</p>
 									<p><span style="font-weight:900"> PAGES : </span> {{$ctrl.activeBook.pages}}</p>
-									<p><span style="font-weight:900"> RATING : </span> {{$ctrl.activeBook.rating}}</p>
+									<p><span style="font-weight:900"> RATING : </span> {{$ctrl.activeBook.rating.rate}}</p>
 									<p><span style="font-weight:900"> DESCRIPTION : </span><br> {{$ctrl.activeBook.description}}</p>
 
 								</div>

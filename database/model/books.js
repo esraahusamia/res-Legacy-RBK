@@ -7,7 +7,7 @@ var bookSchema = mongoose.Schema({
   image:String,
   pdf:String,
   gener:String,
-  rating:Number,
+  rating:{rate: Number, counter: Number},
   publishDate:String,
   reviews:String,
   pages:Number,

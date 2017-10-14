@@ -7,6 +7,7 @@
 	<meta name="keywords" content="">
 	<meta name="author" content="">
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/lists.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="angular.min.js"></script>
 	<script	  src="https://code.jquery.com/jquery-3.2.1.js"
@@ -22,6 +23,9 @@
 	<script src="controller/paid.js"></script>
 	<script src="controller/addbook.js"></script>
 
+	<script src="controller/lists.js"></script>
+	<script src="controller/list.js"></script>
+	<script src="controller/bookList.js"></script>
 
 </head>
 <body ng-app ="book-store">
@@ -52,15 +56,19 @@
    	<section id='showcase'>
    	 <div class='container'>
    	 	<p> There Is NO Friend <br>
-   	 	                         As Loyal As a Book</p>
+   				As Loyal As a Book</p>
    	 </div>
    	</section>
     <!--middle-->
-     <div id='app'>
+     <div id='app' class="mainDiv">
    	 <div class="container1">
    	 <books/>
+	<!-- 	 <lists></lists> -->
+
      </div>
    	 </div>
+		 <br /><br />
+		 <br /><br />
 
 
    	<!-- footer -->
@@ -89,24 +97,24 @@
 	</script>
 
 	<script type="text/javascript">
-		
-	(function (){
-      $.ajax({
-         async: false,
 
-        url: "/getLists",
-        type:'GET',
-
-        dataType: 'json',
-        success: function(lists){
-          console.log(liiiiiiist);
-          window.lists=lists;
-
-          }
-
-        })
-
-    })();
+	// (function (){
+  //     $.ajax({
+  //        async: false,
+	//
+  //       url: "/getLists",
+  //       type:'GET',
+	//
+  //       dataType: 'json',
+  //       success: function(lists){
+  //         console.log('liiiiiiist');
+  //         window.lists=lists;
+	//
+  //         }
+	//
+  //       })
+	//
+  //   })();
 	</script>
 </body>
 </html>

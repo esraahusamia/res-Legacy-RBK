@@ -1,5 +1,5 @@
-angular.module('book-store',['angular.filter'])
-.component('books',{
+var books= angular.module('book-store',['angular.filter'])
+books.component('books',{
 
 
 
@@ -90,7 +90,36 @@ angular.module('book-store',['angular.filter'])
     this.activeBook=index;
   }
   
-  
+  $scope.rating = 0;
+    $scope.ratings = [{
+        current: 3,
+        max: 5
+         }];
+
+    this.getSelectedRating = function (rating) {
+      this.data = {
+        rating: rating,
+        id : this.activeBook._id
+      }
+      var that = this;
+      $.ajax({
+         url : "/getSelectedRating",
+         method: 'put' ,
+         async: false,
+         dataType: 'json',
+         data : {
+            rating: rating,
+            id : that.activeBook._id
+          },
+         success : function (response) {  
+            console.log('hiiiiiiiiiiiiiiiii', response)
+            that.activeBook.rating.rate = response;
+          }, 
+          error : function error(err){
+            console.log('err')
+          }
+       })
+    }  
 },
 
 
@@ -98,4 +127,45 @@ angular.module('book-store',['angular.filter'])
 templateUrl:`../templates/books.html`
 
 })
+
+books.directive('starRating', function () {
+    return {
+        restrict: 'A',
+        template: '<ul class="rating">' +
+            '<li ng-repeat="star in stars" ng-class="star" ng-click="toggle($index)">' +
+            '\u2605' +
+            '</li>' +
+            '</ul>',
+        scope: {
+            ratingValue: '=',
+            max: '=',
+            onRatingSelected: '&'
+        },
+        link: function (scope, elem, attrs) {
+
+            var updateStars = function () {
+                scope.stars = [];
+                for (var i = 0; i < scope.max; i++) {
+                    scope.stars.push({
+                        filled: i < scope.ratingValue
+                    });
+                }
+            };
+
+            scope.toggle = function (index) {
+                scope.ratingValue = index + 1;
+                scope.onRatingSelected({
+                    rating: index + 1
+                });
+            };
+
+            scope.$watch('ratingValue', function (oldVal, newVal) {
+                if (newVal) {
+                    updateStars();
+                }
+            });
+        }
+    }
+});
+
 

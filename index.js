@@ -5,17 +5,22 @@ var mongoose =require ('mongoose');
 var db=require('./database/index');
 var books1 = require('google-books-search');
 var bodyParser = require('body-parser');
-var books=require('./database/model/books'); 
+var books=require('./database/model/books');
 var users=require('./database/model/users');
 var reviews=require('./database/model/reviews');
+
 var session=require('express-session'); 
 var morgan = require('morgan')
+mongoose.Promise = require('bluebird');
+
+
+var session=require('express-session');
 
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname+'/client'));
-var port=process.env.PORT ||1128;
+var port=process.env.PORT || 2525;
 
 //this part for user login & signup
 //intialize  user session
@@ -43,7 +48,7 @@ app.get ('/', (req, res) => {
   }
 })
 
-app.get ('/index2', (req, res) => {
+app.get ('/index', (req, res) => {
   // console.log (req.session.username, '--------', !!req.session.username);
   if (!!req.session.username){
     res.redirect ('/index2.html');
@@ -54,12 +59,12 @@ app.get ('/index2', (req, res) => {
 })
 
 //render the login page
-app.get('/login', 
+app.get('/login',
   function(req, res) {
     res.redirect('login.html');
   });
 //render the signup page
-app.get('/signup', 
+app.get('/signup',
   function(req, res) {
     res.redirect('/signup.html');
   });
@@ -67,16 +72,16 @@ app.get('/signup',
 app.post('/signup', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
-      //check if user is already exsist  
+      //check if user is already exsist
       users.findOne({ username: username })
       .exec(function(err, user) {
-        //if the user dosen't exsist 
+        //if the user dosen't exsist
         if (!user) {
           var newUser = new users({
             username: username,
             password: password
           });
-          //save the new user in the database 
+          //save the new user in the database
           newUser.save(function(err, newUser) {
             if (err) {
               res.send(500, err);
@@ -88,14 +93,14 @@ app.post('/signup', function(req, res) {
 
             }
           });
-        } 
+        }
         else {
           console.log('Account already exists');
           res.redirect('/signup.html');
-        } 
+        }
       });
     });
-//create the user session 
+//create the user session
 var createSession = function(req, res, newUser) {
   return req.session.regenerate(function() {
     console.log( req.session)
@@ -103,7 +108,7 @@ var createSession = function(req, res, newUser) {
     res.redirect('index2.html');
   });
 };
-//comparing the input password to the saved one in the database 
+//comparing the input password to the saved one in the database
 var comparePassword = function (attemptedPassword, callback) {
   bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
     if(err) {
@@ -114,55 +119,57 @@ var comparePassword = function (attemptedPassword, callback) {
     }
   });
 }
-//handle the login post 
+//handle the login post
 app.post('/login', function(req, res) {
-  console.log ('++++++> ');
-  var username = req.body.username;
-  var password = req.body.password;
-  //check if the user in the database or not 
-  users.findOne({ username: username }, function(err, user) {
-   if (!user) {
-     res.redirect('/login');
-   } else {
-     // comparePassword(password, function(err, match) {
-     //  if (match) {
-        // users.createSession(req, res, user);
-        if (password === user.password){
-        req.session.username = user.username;
-        console.log ('----> ', req.session.username)
-        res.redirect ('/index2');
-      } else {
-        res.redirect('/login');
-      }
-    // });
-   }
+  console.log ('++++++>')
+ var username = req.body.username;
+ var password = req.body.password;
+    //check if the user in the database or not
+    users.findOne({ username: username }, function(err, user) {
+     if (!user) {
+       res.redirect('/login');
+     } else {
+       // comparePassword(password, function(err, match) {
+       //  if (match) {
+          // users.createSession(req, res, user);
+          if (password === user.password){
+          req.session.username = user.username;
+          console.log ('---->', req.session.username)
+          res.redirect ('/index');
+
+        } else {
+          res.redirect('/login');
+        }
+      // });
+     }
    })
   });
 //end of user siginup and login handling
 
 app.get ('/logout', (req, res) => {
+  console.log(req.session.username, '<------------------');
   req.session.username = null;
-  redirect ('/login');
+  res.redirect ('/login');
 })
 
 //this part for search in google Api
 app.post('/search',function (req,res){
   books1.search( req.body.token, function(error, results) {
     //console.log(req.session)
-    if ( ! error ) {
+    if (!error) {
       res.json(results);
     } else {
       console.log(error);
     }
   });
 })
-//this part is for comment storing and send all the comments to the client 
+//this part is for comment storing and send all the comments to the client
 app.post('/coment',function (req,res){
   review=new reviews({bookid:req.body.id,text:req.body.coment});
   review.save(function(err, result){
     if(err){
       res.status(500).send(err);
-    } 
+    }
   })
   reviews.find({bookid:req.body.id}).exec(function(err, data){
     if(err){
@@ -170,32 +177,42 @@ app.post('/coment',function (req,res){
     }else{
       res.json(data)
     }
-    
+
     })
   })
-//this get to send all the books data from the database to the client 
-//it will recived in index2.html page 
+//this get to send all the books data from the database to the client
+//it will recived in index2.html page
 app.get('/init',function (req,res){
   books.find({},function(err, result){
     res.json(result)
   })
 })
 
-// app.post('/addToList',function(req,res){
-//   users.findOne({
-//     username: req.session.username
-//   }, (err, user) => {
-//     if (err) console.log (err);
+// {
+//   lists: [
+//     {
+//       listName:,
+//       list:[]
+//     }
+//   ]
+// }
 
-//     users.update({
-//       lists: 
-//     })
-//   })
-// })
+app.put('/addToList', (req, res) => {
+  users.update({
+    username: req.session.username, "lists.listName": req.body.listName
+  }, {
+    "$push": {
+      "lists.$.list": req.body.book_id
+    }
+  }, (err, result) => {
+    if (err) res.send(err)
+    res.send(result); // response with update status
+  })
+})
 
 app.put('/createList',function(req,res){
   // mongo.connect(url,function(err,db){
-    console.log ('llllllllllllll')
+    console.log ('llllllllllllll', req.session.username, req.body.book_id, req.body.listName)
     users.update(
       {username:req.session.username},
       {$push:
@@ -210,14 +227,32 @@ app.put('/createList',function(req,res){
 
   })
 
-app.get('/getLists',function(req,res){
-  var book= db.collection('users').findOne({username:req.body.username}, (err, user) => {
-    if(err)
-      console.log(err)
-    res.send(user.lists);
-  })
-    // res.redirect('/index')
 
+app.put('/getSelectedRating', function(req, res) {
+  console.log ('+++++++++++++')
+  var ratt = parseInt(req.body.rating);
+  console.log(req.body.rating)
+  console.log("00000000", ratt)
+
+    books.findById(req.body.id, function(err, book) {
+      if (err){
+        console.log("giting book by id error ------")
+          return res.send(err)
+      }
+
+      console.log('old data : ' , book.rating )
+      console.log(book.rating.rate ,book.rating.counter , ratt ,'/', (book.rating.counter + 1) )
+      
+      book.rating.rate = ((book.rating.rate * book.rating.counter) + ratt) / (book.rating.counter + 1);
+      book.rating.counter = book.rating.counter+1
+      console.log('new data : ' , book.rating);
+
+      book.save(function(err, book){
+        console.log ('+_+_+_+_+_>', book)
+        if (err) console.log(err)
+      res.send(201, book.rating.rate);
+      })
+  })   
 })
 
 app.post('/addbook', (req, res) => {
@@ -238,6 +273,37 @@ app.post('/addbook', (req, res) => {
     res.json(book);
   });
 });
+
+
+
+
+// })
+
+
+app.get ('/getLists', async (req, res) => {
+
+  var lists = [];
+  var listo = [];
+  var user = await users.findOne({
+    username: req.session.username
+  });
+
+
+  for (var i = 0; i < user.lists.length; i++){
+    var currentList = user.lists[i].list;
+    var listName = user.lists[i].listName;
+    listo = [];
+    for (var j = 0; j < currentList.length; j++){
+      var book = await books.findOne({
+        _id: currentList[j]
+      });
+      listo.push (book);
+    }
+    lists.push({listName: listName, list: listo});
+  }
+  res.send(lists);
+})
+
 // [{listName:req.body.listName,list:[req.body.book_id]}]
 // app.post('/index',function(req,res){
 //   mongo.connect(url,function(err,db){
@@ -254,7 +320,7 @@ app.post('/addbook', (req, res) => {
 
 
 
-// books.create({title:'creating-your-cv-as-a-self-marketing-tool',
+// var allBooks = [{title:'creating-your-cv-as-a-self-marketing-tool',
 //   gener:'Career & Study advice',
 
 // description:"Whether you are just starting out on your career or are in employment, your job searching must have one tool before that journey starts and that is a professional CV.Your CV needs a creative and meaningful profile, clearly identifying your achievements and what you have to offer a potential employer through your personal skills and abilities.This book goes through a structured approach of how to tackle each key stage in order to bring your CV together, by carrying out a number of self analysis exercises.The benefits include increased confidence, self esteem and the belief that you will find the job you are looking for.",
@@ -594,10 +660,19 @@ app.post('/addbook', (req, res) => {
 //   rating : 0,
 //   reviews :'' ,
 //   pdf:'adolf-hitler-hourly-history.pdf',
-//   image:'adolf-hitler2.jpg'},function (err, small) {
+//   image:'adolf-hitler2.jpg'}];
+ 
+
+// for (var n = 0 ; n < allBooks.length ; n ++) {
+//   allBooks[n].rating = {rate: allBooks[n].rating , counter: 0}
+//   var book = new books (allBooks[n]);
+//   book.save();
+// }
+
+//,function (err, small) {
 //      if (err) return console.error(err);
 //   // saved!
-// }) 
+// })
 // Book1.find({},function (err,result){
 //   if(err){
 //     console.log(err);
@@ -605,15 +680,12 @@ app.post('/addbook', (req, res) => {
 //     else {
 //       console.log(result)
 //     }
-  
+
 // });
   app.use(function(req, res){
        res.send(404);
    });
-//server creating 
+//server creating
 app.listen(port, function() {
   console.log(`listening on port ${port}`);
 });
-
-
-
